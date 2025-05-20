@@ -15,5 +15,7 @@ func (app *application) serve() error {
 		WriteTimeout: 5 * time.Second,
 	}
 
+	fmt.Println("Server is running on port", app.port)
+
 	return server.ListenAndServe()
 }
