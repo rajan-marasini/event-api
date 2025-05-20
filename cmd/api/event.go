@@ -15,8 +15,6 @@ func (app *application) createEvent(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	fmt.Println(c)
-
 	err := app.models.Event.Insert(&event)
 
 	if err != nil {
