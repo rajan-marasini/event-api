@@ -45,7 +45,7 @@ func (app *application) getEvent(c *gin.Context) {
 }
 
 func (app *application) getAllEvent(c *gin.Context) {
-	events, err := app.models.Events.GetAll()
+	events, err := app.models.Event.GetAll()
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve events"})
