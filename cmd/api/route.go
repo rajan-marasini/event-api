@@ -23,6 +23,7 @@ func (app *application) route() http.Handler {
 		v1.GET("/attendee/:id/events", app.getEventByAttendees)
 
 		v1.POST("/auth/register", app.registerUser)
+		v1.POST("/auth/login", app.login)
 	}
 
 	return g
