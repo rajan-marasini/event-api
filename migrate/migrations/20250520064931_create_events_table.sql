@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS events (
     name VARCHAR(100) NOT NULL,
     description TEXT,
     location VARCHAR(255) NOT NULL,
-    date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    date VARCHAR(100) NOT NULL,
     FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE
 ); 
 -- +goose StatementEnd
