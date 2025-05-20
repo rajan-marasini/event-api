@@ -19,7 +19,7 @@ type registerRequest struct {
 
 type loginRequest struct {
 	Email    string `json:"email" binding:"required,email"`
-	Password string `json:"email" binding:"required,min=8"`
+	Password string `json:"password" binding:"required,min=8"`
 }
 
 type loginResponse struct {
@@ -34,7 +34,7 @@ func (app *application) login(c *gin.Context) {
 		return
 	}
 
-	existingUser, err := app.models.User.getByEmail(auth.Email)
+	existingUser, err := app.models.User.GetByEmail(auth.Email)
 	if existingUser == nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
 		return
