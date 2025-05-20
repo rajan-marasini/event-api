@@ -17,8 +17,8 @@ func (app *application) route() http.Handler {
 		v1.PUT("/event/:id", app.updateEvent)
 		v1.DELETE("/event/:id", app.deleteEvent)
 
-		v1.GET("/event/:id/attendees", app.getAttendeesForEvent)
 		v1.POST("/event/:id/attendees/:userId", app.addAttendeeToEvent)
+		v1.GET("/event/:id/attendees", app.getAttendeesForEvent)
 		v1.DELETE("/event/:id/attendees/:userId", app.deleteAttendeesFromEvent)
 		v1.GET("/attendee/:id/events", app.getEventByAttendees)
 

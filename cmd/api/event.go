@@ -135,6 +135,7 @@ func (app *application) addAttendeeToEvent(c *gin.Context) {
 	}
 
 	if userToAdd == nil {
+		fmt.Println("error is the ", userToAdd)
 		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
 		return
 	}
@@ -145,7 +146,7 @@ func (app *application) addAttendeeToEvent(c *gin.Context) {
 		return
 	}
 
-	if existingAttendee == nil {
+	if existingAttendee != nil {
 		c.JSON(http.StatusConflict, gin.H{"error": "Attendee already exists"})
 		return
 	}
