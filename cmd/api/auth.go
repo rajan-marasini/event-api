@@ -36,6 +36,7 @@ func (app *application) login(c *gin.Context) {
 
 	existingUser, err := app.models.User.GetByEmail(auth.Email)
 	if existingUser == nil {
+		fmt.Println("existing user", existingUser)
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
 		return
 	}
