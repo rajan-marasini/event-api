@@ -32,7 +32,7 @@ func (m *EventModel) Insert(event *Event) error {
 		RETURNING id
 	`
 
-	return m.DB.QueryRowContext(ctx, query, event.OwnerId, event.Name, event.Description, event.Date, event.Location).Scan(&event.ID)
+	return m.DB.QueryRowContext(ctx, query, event.OwnerId, event.Name, event.Description, event.Location, event.Date).Scan(&event.ID)
 }
 
 func (m *EventModel) Get(id int) (*Event, error) {
@@ -42,10 +42,12 @@ func (m *EventModel) Get(id int) (*Event, error) {
 	var event Event
 
 	query := `
-		SELECT * FROM events WHERE id=$1 LIMIT 1
+		SELECT 
+		id, owner_id, name, description, location, date
+		FROM events WHERE id=$1 LIMIT 1
 	`
 
-	err := m.DB.QueryRowContext(ctx, query, id).Scan(&event.ID, &event.OwnerId, &event.Name, &event.Description, &event.Date, &event.Location)
+	err := m.DB.QueryRowContext(ctx, query, id).Scan(&event.ID, &event.OwnerId, &event.Name, &event.Description, &event.Location, &event.Date)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil
@@ -71,7 +73,7 @@ func (m *EventModel) GetAll() ([]*Event, error) {
 	for rows.Next() {
 		var event Event
 
-		err := rows.Scan(&event.ID, &event.OwnerId, &event.Name, &event.Description, &event.Date, &event.Location)
+		err := rows.Scan(&event.ID, &event.OwnerId, &event.Name, &event.Description, &event.Location, &event.Date)
 		if err != nil {
 			return nil, err
 		}
