@@ -1,4 +1,44 @@
 definitions:
+  main.loginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        minLength: 8
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  main.loginResponse:
+    properties:
+      token:
+        type: string
+    type: object
+  main.registerRequest:
+    properties:
+      email:
+        type: string
+      name:
+        minLength: 2
+        type: string
+      password:
+        minLength: 8
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
+  models.Attendee:
+    properties:
+      event_id:
+        type: integer
+      id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
   models.Event:
     properties:
       date:
@@ -22,12 +62,257 @@ definitions:
     - location
     - name
     type: object
+  models.User:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
 info:
   contact: {}
   description: Enter your bearer token in the format **Bearer &lt;token&gt;**
   title: Go Gin Rest API
   version: 1.0.0
 paths:
+  /api/v1/attendee/{id}/events:
+    get:
+      consumes:
+      - application/json
+      description: Returns all events for a given attendee
+      parameters:
+      - description: Attendee ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Event'
+            type: array
+      summary: Returns all events for a given attendee
+      tags:
+      - attendees
+  /api/v1/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login a user
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/main.loginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.loginResponse'
+      summary: Login a user
+      tags:
+      - auth
+  /api/v1/auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Registers a new user
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/main.registerRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Registers a new user
+      tags:
+      - auth
+  /api/v1/event:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new event
+      parameters:
+      - description: Event
+        in: body
+        name: event
+        required: true
+        schema:
+          $ref: '#/definitions/models.Event'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Event'
+      security:
+      - BearerAuth: []
+      summary: Creates a new event
+      tags:
+      - events
+  /api/v1/event/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes an existing event
+      parameters:
+      - description: Event ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      security:
+      - BearerAuth: []
+      summary: Deletes an existing event
+      tags:
+      - events
+    get:
+      consumes:
+      - application/json
+      description: Returns a single event
+      parameters:
+      - description: Event ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Event'
+      summary: Returns a single event
+      tags:
+      - events
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing event
+      parameters:
+      - description: Event ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Event
+        in: body
+        name: event
+        required: true
+        schema:
+          $ref: '#/definitions/models.Event'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Event'
+      security:
+      - BearerAuth: []
+      summary: Updates an existing event
+      tags:
+      - events
+  /api/v1/event/{id}/attendees:
+    get:
+      consumes:
+      - application/json
+      description: Returns all attendees for a given event
+      parameters:
+      - description: Event ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+      summary: Returns all attendees for a given event
+      tags:
+      - attendees
+  /api/v1/event/{id}/attendees/{userId}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes an attendee from an event
+      parameters:
+      - description: Event ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      security:
+      - BearerAuth: []
+      summary: Deletes an attendee from an event
+      tags:
+      - attendees
+    post:
+      consumes:
+      - application/json
+      description: Adds an attendee to an event
+      parameters:
+      - description: Event ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Attendee'
+      security:
+      - BearerAuth: []
+      summary: Adds an attendee to an event
+      tags:
+      - attendees
   /api/v1/events:
     get:
       consumes:
@@ -44,5 +329,5 @@ paths:
             type: array
       summary: Returns all events
       tags:
-      - Events
+      - events
 swagger: "2.0"

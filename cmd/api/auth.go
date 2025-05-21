@@ -26,6 +26,16 @@ type loginResponse struct {
 	Token string `json:"token"`
 }
 
+// Login logs in a user
+//
+//	@Summary		Login a user
+//	@Description	Login a user
+//	@Tags			auth
+//	@Accept			json
+//	@Produce		json
+//	@Param			user	body	loginRequest	true	"User"
+//	@Success		200	{object}	loginResponse
+//	@Router			/api/v1/auth/login [post]
 func (app *application) login(c *gin.Context) {
 	var auth loginRequest
 
@@ -65,6 +75,15 @@ func (app *application) login(c *gin.Context) {
 
 }
 
+// RegisterUser registers a new user
+// @Summary		Registers a new user
+// @Description	Registers a new user
+// @Tags			auth
+// @Accept			json
+// @Produce		json
+// @Param			user	body		registerRequest	true	"User"
+// @Success		201	{object}	models.User
+// @Router			/api/v1/auth/register [post]
 func (app *application) registerUser(c *gin.Context) {
 	var register registerRequest
 
