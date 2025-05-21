@@ -49,6 +49,15 @@ func (app *application) getEvent(c *gin.Context) {
 	c.JSON(http.StatusOK, event)
 }
 
+// getEvents return all events
+//
+// @Summary Returns all events
+// @Description Returns all events
+// @Tags Events
+// @Accept json
+// @Produce json
+// @Success 200 {object} []models.Event
+// @Router /api/v1/events [get]
 func (app *application) getAllEvent(c *gin.Context) {
 	events, err := app.models.Event.GetAll()
 
